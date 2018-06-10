@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Islamismo</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Maria Eduarda" />
+    <meta name="date" content="2018-06-09" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Islamismo
+### Maria Eduarda
+### 2018-06-09
+
+---
+
+
+#Peninsula Arabica
+
+- É banhada pelo Mar Vermelho, Golfo Pérsico e Oceano Índico.
+
+- Grande parte de seu terrítorio é desértico,sendo encontrados algumas áreas férteis chamadas óasis.
+
+- Seus primeiros habitantes eram chamados de beduínos,que viviam em tribos nomades e em constantes combates para a conquista dos oásis que lhes proporcionava água e terra fértil para o plantio.
+
+---
+#Península Arábica
+
+&lt;img src="arabia.jpg" width="600" height="450px" /&gt;
+
+---
+
+#Pilares do Islamismo
+
+- Fé: reconhecer Alá como seu Deus e Maomé como seu profeta
+
+- Oração: rezar cinco vezes ao dia sempre em direção a Meca
+
+- Jejum: jejuar no mês do Ramadã 
+
+- Caridade: dar esmoalas aos mais necessitados na intenção de divulgar a religião
+
+- Peregrinação: ir a Meca pelo menos uma vez na vida caso tenha condições físicas ou financeiras.
+
+---
+
+#Alcorão
+
+- Alcorão ou Corão significa "A Recitação".
+
+- Esse livro é considerado sagrado para a religião islamica,é nele onde contém orientações para a vida dos fiéis.
+
+---
+
+#Alcorão
+
+##Baixar o livro
+
+
+```r
+alcorao &lt;- gutenberg_download(2800)
+
+head(alcorao)
+```
+
+```
+## # A tibble: 6 x 2
+##   gutenberg_id text                                                       
+##          &lt;int&gt; &lt;chr&gt;                                                      
+## 1         2800 The Koran                                                  
+## 2         2800 ""                                                         
+## 3         2800 ""                                                         
+## 4         2800 ""                                                         
+## 5         2800 TRANSLATED FROM THE ARABIC BY THE REV. J.M. RODWELL, M.A. ~
+## 6         2800 INTRODUCTION BY THE REV. G. MARGOLIOUTH, M.A.
+```
+
+---
+
+#Alcorão
+
+##Transformar livros em palavras
+
+
+```r
+palavras &lt;- alcorao %&gt;% 
+  unnest_tokens(word,text)
+
+head(palavras)
+```
+
+```
+## # A tibble: 6 x 2
+##   gutenberg_id word      
+##          &lt;int&gt; &lt;chr&gt;     
+## 1         2800 the       
+## 2         2800 koran     
+## 3         2800 translated
+## 4         2800 from      
+## 5         2800 the       
+## 6         2800 arabic
+```
+
+---
+
+#Alcorão
+
+##Contar palavras
+
+
+```r
+contar &lt;- palavras %&gt;% 
+  count(word , sort = TRUE)
+
+head(contar,n=10)
+```
+
+```
+## # A tibble: 10 x 2
+##    word      n
+##    &lt;chr&gt; &lt;int&gt;
+##  1 the   11772
+##  2 and    8843
+##  3 of     6934
+##  4 to     5228
+##  5 god    3249
+##  6 in     3148
+##  7 they   3019
+##  8 is     2872
+##  9 a      2636
+## 10 them   2366
+```
+---
+
+#Alcorão
+
+##Contar palavras
+
+
+```r
+stop &lt;-  data.frame(
+  word = c("ye", "hath", 
+            "thou", "thee", 
+           "thy","1", "sura",
+           "2","3","4","5","6","7",
+           "8","9"))
+ 
+contar &lt;- palavras %&gt;% 
+  count(word , sort = TRUE) %&gt;% 
+  anti_join(stop_words) %&gt;% 
+  anti_join(stop)
+```
+---
+#Alcorão
+
+##Contar palavras
+
+
+```
+## # A tibble: 20 x 2
+##    word         n
+##    &lt;chr&gt;    &lt;int&gt;
+##  1 god       3249
+##  2 lord       946
+##  3 day        542
+##  4 verily     490
+##  5 people     428
+##  6 earth      418
+##  7 truth      319
+##  8 fear       310
+##  9 signs      305
+## 10 muhammad   296
+## 11 life       247
+## 12 book       241
+## 13 merciful   240
+## 14 surely     235
+## 15 apostle    225
+## 16 koran      225
+## 17 lit        207
+## 18 verses     201
+## 19 mercy      200
+## 20 infidels   199
+```
+---
+
+#Alcorão
+
+##Wordcloud
+
+
+```r
+wordcloud(words = contar$word, freq = contar$n, min.freq = 1,
+          max.words=200, random.order=FALSE, rot.per=0.35, 
+          colors=brewer.pal(8, "Dark2"))
+```
+
+---
+
+#Wordcloud
+
+&lt;img src="islamismo_files/figure-html/unnamed-chunk-8-1.png" height="500%" /&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
